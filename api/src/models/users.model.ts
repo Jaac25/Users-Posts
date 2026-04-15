@@ -1,6 +1,6 @@
 import { DataTypes, Model } from "sequelize";
-import type { IUser } from "../core/types/user.js";
-import { sequelize } from "../config/database.js";
+import type { IUser } from "../core/types/user";
+import { sequelize } from "../config/database";
 
 interface UserInstance extends Model<IUser>, IUser {}
 

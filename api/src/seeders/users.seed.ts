@@ -1,7 +1,6 @@
-import { getUsers } from "../repositories/reqresIn/users.req";
 import { countUsers, fillUser } from "../services/users.service";
 
-export const seedUsers = async () => {
+export const seedUser = async () => {
   const count = await countUsers();
 
   if (count > 0) {
@@ -9,21 +8,10 @@ export const seedUsers = async () => {
     return;
   }
 
-  const service = fillUser();
-
-  const users = await getUsers({});
-
-  const formatted = users.map((c) => ({
-    id: c.id,
-    name: c.name,
-    status: c.status,
-    species: c.species,
-    gender: c.gender,
-    origin: c.origin,
-    image: c.image,
-  }));
-
-  await service.createCharacters(formatted);
-
-  console.log("15 characters seeded successfully");
+  const u = await fillUser();
+  if (!u) {
+    console.log("User not created");
+    return;
+  }
+  console.log("User created");
 };

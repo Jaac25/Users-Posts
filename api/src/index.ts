@@ -1,9 +1,12 @@
+import "dotenv/config";
 import express, { type Request, type Response } from "express";
 import Server from "./server";
 import cors from "cors";
-import { sequelize } from "./config/database";
 import userRouter from "./controllers/routes/users.route";
 import postsRouter from "./controllers/routes/posts.route";
+import { seedUser } from "./seeders/users.seed";
+import loginRoutes from "./controllers/routes/login.route";
+import { sequelize } from "./config/database";
 
 const server = new Server();
 
@@ -31,13 +34,18 @@ server.app.use(
 server.app.get("/", (req: Request, res: Response) => {
   res.send("Api para que nos contraten!");
 });
+server.app.use("/auth", loginRoutes);
 server.app.use("/users", userRouter);
 server.app.use("/posts", postsRouter);
 
 //Levantar servidor
 server.start(async () => {
   try {
-    await sequelize.sync({ force: false });
+    await sequelize.authenticate();
+    console.log("DB connected");
+
+    await sequelize.sync({ alter: true });
+    await seedUser();
     console.info(`Server running in port: ${server.port}`);
   } catch (error) {
     console.error(error);

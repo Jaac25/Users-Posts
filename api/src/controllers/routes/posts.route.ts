@@ -1,19 +1,16 @@
 import { Request, Response, Router } from "express";
+import { verifyTokenClient } from "../../middlewares/autentication";
 import {
   createPostService,
   getPostService,
   getPostsService,
 } from "../../services/posts.service";
 
-const postsRouter = Router();
+const postsRoustes = Router();
 
-// postsRouter.use(authMiddleware);
+postsRoustes.use(verifyTokenClient);
 
-postsRouter.post("/", async (req: Request, res: Response) => {
-  const post = await createPostService(req.body);
-  return res.status(201).json({ post });
-});
-postsRouter.get("/", async (req: Request, res: Response) => {
+postsRoustes.get("/", async (req: Request, res: Response) => {
   try {
     const posts = await getPostsService();
     return res.status(200).json(posts);
@@ -24,7 +21,8 @@ postsRouter.get("/", async (req: Request, res: Response) => {
     });
   }
 });
-postsRouter.get("/:id", async (req: Request, res: Response) => {
+
+postsRoustes.get("/:id", async (req: Request, res: Response) => {
   try {
     const post = await getPostService(`${req.params.id}`);
     return res.status(200).json(post);
@@ -36,4 +34,9 @@ postsRouter.get("/:id", async (req: Request, res: Response) => {
   }
 });
 
-export default postsRouter;
+postsRoustes.post("/", async (req: Request, res: Response) => {
+  const post = await createPostService(req.body);
+  return res.status(201).json({ post });
+});
+
+export default postsRoustes;

@@ -1,12 +1,11 @@
 import axios from "axios";
-import type { IUser } from "../../core/types/user.js";
 import { IUserReqRes, IUsersReqRes } from "../../core/reqres/users.js";
 
 const headers = {
   [`${process.env.REQRES_HEADER}`]: process.env.REQRES_HEADER_VALUE,
 };
 
-export const getUsers = async ({ page = 1 }: { page?: number }) => {
+export const getUsers = async ({ page = "1" }: { page?: string }) => {
   const res = await axios.get<IUsersReqRes>(
     `${process.env.REQRES_URL}/users?page=${page}`,
     {

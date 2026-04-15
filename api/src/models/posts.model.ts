@@ -1,10 +1,9 @@
 import { DataTypes, Model } from "sequelize";
-import type { IUser } from "../core/types/user.js";
-import { sequelize } from "../config/database.js";
-import type { IPost } from "../core/types/post.js";
-import { User } from "./users.model.js";
+import { sequelize } from "../config/database";
+import type { IPost } from "../core/types/post";
+import { User } from "./users.model";
 
-interface PostInstance extends Model<IPost>, IUser {}
+interface PostInstance extends Model<IPost>, IPost {}
 
 export const Post = sequelize.define<PostInstance>(
   "posts",
@@ -16,7 +15,7 @@ export const Post = sequelize.define<PostInstance>(
     },
     title: { type: DataTypes.STRING, allowNull: false },
     content: { type: DataTypes.STRING, allowNull: false },
-    authorId: {
+    idUser: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: { model: "users", key: "id" },
